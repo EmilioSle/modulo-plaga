@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Captura de Plaga</title>
+  <style>
+    video, canvas, img {
+      display: block;
+      margin: 10px auto;
+      border: 1px solid #ccc;
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Captura de Plaga desde Cámara</h2>
+  <video id="video" width="320" height="240" autoplay></video>
+  <button onclick="capturar()">Capturar Imagen</button>
+  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+  <img id="preview" width="320" height="240" alt="Vista previa" />
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const preview = document.getElementById('preview');
+
+    // Solicitar acceso a la cámara
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        alert("No se pudo acceder a la cámara: " + err);
+      });
+
+    function capturar() {
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const base64 = canvas.toDataURL('image/jpeg');
+      preview.src = base64;
+
+      // Enviar a Laravel
+      fetch('http://127.0.0.1:8000/api/detecciones/ia', {
+
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imagen_base64: base64,
+          lote_afectado_id: 1
+        })
+      })
+      .then(res => res.text()) // <-- leer como texto para depurar
+      .then(data => {
+        try {
+          const json = JSON.parse(data);
+          alert("Respuesta de IA: " + JSON.stringify(json));
+        } catch (e) {
+          alert("Respuesta no es JSON:\n" + data);
+        }
+      })
+      .catch(err => {
+        alert("Error al enviar la imagen: " + err);
+      });
+    }
+  </script>
+</body>
+</html>
