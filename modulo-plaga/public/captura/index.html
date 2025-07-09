@@ -28,7 +28,7 @@
     const canvas = document.getElementById('canvas');
     const preview = document.getElementById('preview');
 
-    // Solicitar acceso a la cámara
+    // Solicitar acceso a la cámara si
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
         video.srcObject = stream;
