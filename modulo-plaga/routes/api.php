@@ -9,6 +9,10 @@ use App\Http\Controllers\MedidaSugeridaController;
 use App\Http\Controllers\DeteccionController;
 use App\Http\Controllers\ReporteController;
 
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,9 +24,9 @@ use App\Http\Controllers\ReporteController;
 |
 */
 
-// Ruta de prueba
+// Ruta de prueba única
 Route::get('/ping', function () {
-    return response()->json(['message' => 'API funcionando correctamente']);
+    return response()->json(['message' => 'pong']);
 });
 
 // Rutas RESTful para cada entidad
@@ -32,5 +36,16 @@ Route::apiResource('medidas-sugeridas', MedidaSugeridaController::class);
 Route::apiResource('detecciones', DeteccionController::class);
 Route::apiResource('reportes', ReporteController::class);
 
+// Ruta para IA detección
 Route::post('/detecciones/ia', [DeteccionController::class, 'detectarConIA']);
 
+
+Route::get('/test', function () {
+    return response()->json(['message' => 'API está funcionando']);
+});
+
+
+
+Route::get('/ping', function () {
+    return response()->json(['message' => 'pong']);
+});

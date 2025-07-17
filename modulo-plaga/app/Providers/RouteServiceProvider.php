@@ -7,27 +7,17 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * This is the path to the "home" route for your application.
-     *
-     * Typically, users are redirected here after login.
-     *
-     * @var string
-     */
     public const HOME = '/home';
 
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     */
     public function boot(): void
     {
         $this->routes(function () {
-            // Rutas API (prefijo 'api', middleware 'api')
+            // Rutas API con prefijo 'api' y middleware 'api'
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-            // Rutas Web (middleware 'web')
+            // Rutas web con middleware 'web'
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
